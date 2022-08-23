@@ -18,20 +18,19 @@ export class TranslateService {
 
   constructor(private http: HttpClient) {}
 
-  use(lang: string): Promise<{}> {
+    use(lang: string): Promise<{}> {
     return new Promise<{}>(resolve => {
-      const langPath = `assets/i18n/${lang || 'en'}`;
-
-      this.http.get(langPath).subscribe(
-        response => {
-          this.data = response || {};
+      let langPath = `assets/i18n/${lang || 'en'}.json`;
+      this.http.get(langPath).subscribe({
+        next: (response) => {
+          this.data = Object.assign({}, response || {});
           resolve(this.data);
         },
-        err => {
+        error: (err) => {
           this.data = {};
           resolve(this.data);
         }
-      );
+      });
     });
   }
 }
